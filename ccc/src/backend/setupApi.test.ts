@@ -16,7 +16,7 @@ describe('API', () => {
   // Test the GET request
   test('GET request', async () => {
     // Supertest has built-in tests/assertions for response codes
-    const { text } = await request(app).get('/').expect(200);
+    const { text } = await request(app).get('/get').expect(200);
     assert.equal(text, "Get Received");
   });
 
@@ -24,7 +24,7 @@ describe('API', () => {
   describe('POST request', () => {
     // Test the POST request
     test("success", async () => {
-      const { text } = await request(app).post("/").expect(200);
+      const { text } = await request(app).post("/post").expect(200);
       assert.equal(text, "Post Received");
     });
 

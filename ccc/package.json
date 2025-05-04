@@ -3,23 +3,32 @@
   "version": "1.0.0",
   "private": true,
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/backend/index.js",
   "bin": {
-    "ccc": "dist/index.js"
+    "ccc": "dist/backend/index.js"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
+    "build": "npm run clean ; npm run build:frontend && npm run build:backend",
+    "build:frontend": "tsx ./esbuild.js",
+    "build:backend": "tsc -p tsconfig.json",
+    "clean": "rimraf dist",
+    "start": "node dist/backend/index.js",
     "test": "tsx runTests.ts"
   },
   "license": "MIT",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "htb": "^0.0.1"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.1",
     "@types/express": "^5.0.1",
+    "@types/html-minifier-terser": "^7.0.2",
     "@types/node": "^22.14.0",
+    "esbuild": "^0.25.3",
+    "esbuild-plugin-inline-image": "^0.0.9",
+    "html-minifier-terser": "^7.2.0",
+    "rimraf": "^6.0.1",
     "supertest": "^7.1.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
