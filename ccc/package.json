@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "npm run clean ; npm run build:frontend && npm run build:backend",
-    "build:frontend": "tsx ./esbuild.js",
+    "build:frontend": "tsx ./esbuild.ts",
     "build:backend": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
     "start": "node dist/backend/index.js",

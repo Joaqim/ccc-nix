@@ -1,8 +1,9 @@
 
+
 export default (() => {
     
-    const button = document.querySelector("#counter") as HTMLButtonElement;
-    const counter = document.querySelector("#number") as HTMLElement;
+    const button = document.querySelector("#button") as HTMLButtonElement;
+    const counter = document.querySelector("#counter") as HTMLElement;
     let count = 0;
     button.addEventListener('click', () => {
         count += 1;

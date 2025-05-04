@@ -1,10 +1,10 @@
 #!/usr/bin/env -S tsx
 /* eslint-disable import/no-extraneous-dependencies */
 import esbuild from "esbuild";
-import { writeFile, mkdir } from "node:fs/promises"; 
+import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { minify } from "html-minifier-terser";
-import inlineImage from "esbuild-plugin-inline-image";
-import index from "./src/frontend/index.htb"
+import InlineImagePlugin from "esbuild-plugin-inline-image";
+import index from "./src/frontend/index.htb";
 
 (async () => {
   await mkdir("./dist/frontend", { recursive: true });
@@ -18,7 +18,9 @@ import index from "./src/frontend/index.htb"
       target: ["esnext"],
       write: true,
       outdir: "./dist/frontend",
-      plugins: [inlineImage()],
+      plugins: [
+        InlineImagePlugin(),
+      ],
     })
     .catch(() => process.exit(1));
 
@@ -35,8 +37,13 @@ import index from "./src/frontend/index.htb"
     minifyCSS: true,
   };
 
+  const css = await readFile("src/frontend/index.css", "utf8");
+
   await writeFile(
     "dist/frontend/index.html",
-    `${await minify(index, minifyOptions)}<script type="module" src="./app.js"></script>`
+    `${await minify(
+      index(css),
+      minifyOptions
+    )}`
   );
 })();
