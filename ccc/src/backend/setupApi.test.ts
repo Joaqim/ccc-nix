@@ -27,8 +27,5 @@ describe('API', () => {
       const { text } = await request(app).post("/post").expect(200);
       assert.equal(text, "Post Received");
     });
-
-    // We'll come back to this later. The Node Test Runner will print out that we have a test TODO later.
-    test.todo('error');
   });
 });

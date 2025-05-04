@@ -9,18 +9,25 @@ main {
     align-items: center;
 }
 
-#button {
+button {
     color: rgb(34, 149, 153);
-    background-color: rgb(26, 18, 18);
-    min-width: 20%;
-    min-height: 200px;
-    font-size: 100px;
+    background-color: rgb(72, 72, 94);
+    min-width: 50%;
+    min-height: 20px;
+    font-size: 50px;
 }
 
-#counter {
-    color: rgb(0, 0, 0);
-    font-size: 100px;
+textarea {
+    font-size: xx-large;
+    min-width: 50%;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+input[type="text"], textarea {
+    background-color: #000;
+    color: #fff;
+    font-family: Arial;
 }
