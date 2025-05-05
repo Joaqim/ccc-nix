@@ -1,26 +1,6 @@
 
 
-body {
-    color: rgb(59, 71, 80);
-}
 main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-button {
-    color: rgb(34, 149, 153);
-    background-color: rgb(72, 72, 94);
-    min-width: 50%;
-    min-height: 20px;
-    font-size: 50px;
-}
-
-textarea {
-    font-size: xx-large;
-    min-width: 50%;
-    min-height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,5 +9,94 @@ textarea {
 input[type="text"], textarea {
     background-color: #000;
     color: #fff;
-    font-family: Arial;
+    width: 100%;
+    font-size: 2.5em;
+    min-height: 10vh;
+    border-radius: 12px;
+    pointer-events: none;
+    border-bottom: 1px solid #e0e0e0;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.player-container {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5em;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.player-container:last-child {
+    border-bottom: none;
+}
+.settings-container {
+    background-color: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1400px;
+    min-width: 650px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+.settings-title {
+    font-size: 2.5em;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.setting-item:last-child {
+    border-bottom: none;
+}
+.setting-label {
+    font-size: 2.5em;
+    color: #555;
+}
+.setting-toggle {
+    appearance: none;
+    width: 30vw;
+    height: 10vh;
+    max-width: 300px;
+    max-height: 100px;
+    background: #ddd;
+    border-radius: 20px;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.setting-toggle::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+.setting-toggle:disabled {
+    background: #4CAF50;
+}
+.setting-toggle:disabled::before {
+    transform: translateX(20px);
+}
+body.dark-mode {
+    background-color: #333;
+    color: white;
 }

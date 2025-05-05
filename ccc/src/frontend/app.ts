@@ -1,5 +1,8 @@
-const postCmd = (command: string) => {
-	return fetch("/rcon-cli", {
+
+
+type AvailableEndpoints = "rcon-cli";
+const postCmd = (command: string, endpoint: AvailableEndpoints = "rcon-cli") => {
+	return fetch(`/${endpoint}`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -14,34 +17,41 @@ const downcase = (str: string) => str.charAt(0).toLowerCase() + str.slice(1);
 export default (() => {
 
 	const textarea = document.querySelector("#textarea") as HTMLElement;
-    const main = document.querySelector("#main") as HTMLElement;
+    const container = document.querySelector(".settings-container") as HTMLElement;
 
 	const createBtn = (
-		txtBox: HTMLElement,
 		command: string,
 		commandName?: string,
 	) => {
-        const btn = document.createElement("button")
-        main.appendChild(btn) 
-
+        const btn = document.createElement("input")
+		btn.type = "button"
+		btn.className = "setting-toggle"
+		
+		let commandLabel = commandName || "";
 		if (!commandName) {
-			let sanitizedName = "";
-
 			for (const word of command.trim().split(" ")) {
-				sanitizedName += `${upcase(word)} `;
+				commandLabel += `${upcase(word)} `;
 			}
-			btn.textContent = sanitizedName.trimEnd();
-		} else {
-			btn.textContent = commandName;
 		}
+
+		const span = document.createElement("span")
+		span.className = "setting-label"
+		span.textContent = commandLabel;
+
+		const btnDiv = document.createElement("div")
+		btnDiv.className = "setting-item"
+		btnDiv.appendChild(span)
+		btnDiv.appendChild(btn)
+        container.appendChild(btnDiv) 
+
         
 		btn.addEventListener("click", () => {
             btn.disabled = true;
-			txtBox.textContent = command;
+			textarea.textContent = command;
 
             setTimeout(() => {
                 if (btn.disabled) {
-                    txtBox.textContent += "\r\nLoading...";
+                    textarea.textContent += "\r\nLoading...";
                 }
             }, 1000)
 
@@ -61,11 +71,11 @@ export default (() => {
                     return (await response.json()).message;
 				})
 				.then((text) => {
-					txtBox.textContent = `Successfully ${downcase(text)}`;
+					textarea.textContent = `Successfully ${downcase(text)}`;
 				})
 				.catch((err) => {
                     console.error(err)
-					txtBox.textContent = `Failed to execute '${command}'\r\nError: ${err.message}`;
+					textarea.textContent = `Failed to execute '${command}',\r\n${err.message}`;
 				})
 				.finally(() => {
 					btn.disabled = false;
@@ -73,6 +83,6 @@ export default (() => {
 		});
 	};
 
-	createBtn(textarea, "/weather clear", "Weather: Clear ☀️");
-    createBtn(textarea, "/clear weather", "Intentionally wrong command");
+	createBtn("/weather clear", "Weather: Clear ☀️");
+    createBtn("/clear weather", "Intentionally wrong command");
 })();
