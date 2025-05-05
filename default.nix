@@ -21,5 +21,9 @@ in {
       npm run test
     '';
     doCheck = true;
+    passthru.meta = {
+      description = "Sample express node app using Dream2nix";
+      mainProgram = "ccc";
+    };
   };
 }
