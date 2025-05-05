@@ -93,10 +93,30 @@ export default (() => {
         });
     });
   };
+  createBtn(
+    "/gamemode survival @p",
+    `${localize("Gamemode")}: ${localize("Survival")} 💔`
+  );
 
+  createBtn(
+    "/gamemode creative @p",
+    `${localize("Gamemode")}: ${localize("Creative")} 🖌️`
+  );
+  createBtn(
+    "/gamemode spectator @p",
+    `${localize("Gamemode")}: ${localize("Spectator")} 🎥`
+  );
+
+  createBtn("/clear weather", "Test Failure Button");
+  createBtn("/time set day", `${localize("Set time to day")} 🌅`);
+  createBtn("/time set night", `${localize("Set time to night")} 🌃`);
   createBtn(
     "/weather clear",
     `${localize("Weather")}: ${localize("Clear")} ☀️`
   );
-  createBtn("/clear weather", "Test Failure Button");
+  createBtn(
+    "/weather thunder",
+    `${localize("Weather")}: ${localize("Thunder")} 🌩️`
+  );
+  createBtn("/weather rain", `${localize("Weather")}: ${localize("Rain")} 🌧️`);
 })();

@@ -54,7 +54,10 @@ export default function setupApi() {
 
     execute(`env docker exec minecraft-server rcon-cli '${command}'`)
       .then((result) => {
-        if (result.startsWith("Unknown")) {
+        if (
+          result.startsWith("Unknown or incomplete command") ||
+          result.startsWith("no player was found")
+        ) {
           throw new Error(result);
         }
         return res.send({ message: result });

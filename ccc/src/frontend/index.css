@@ -22,7 +22,8 @@ body {
     background-color: #333;
     color: white;
     margin: 0;
-    padding: 5% 0;
+    padding-top: 5%;
+    padding-bottom: 5%;
     display: flex;
     justify-content: center;
     align-items: stretch;
@@ -50,6 +51,7 @@ body {
     border-bottom: none;
 }
 .settings-container {
+    display: table;
     background-color: white;
     border-radius: 12px;
     width: 90%;
@@ -61,7 +63,7 @@ body {
     font-size: 1.8em;
     text-align: center;
     color: #333;
-    margin-bottom: 2vh;
+    margin-bottom: 1.5vh;
 }
 .textarea-item {
     display: flex;
@@ -71,11 +73,13 @@ body {
     border-bottom: 1px solid #e0e0e0;
 }
 .setting-item {
-    display: inherit;
+    /* display: block; */
+    display: inline-block;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 10px;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 0px 10px;
+    /* border-bottom: 1px solid #e0e0e0;
+     */
     text-align: center;
 }
 .setting-item:last-child {
@@ -84,15 +88,21 @@ body {
 .setting-label {
     font-size: 1.4em;
     color: #555;
+    position: relative;
+    /* top: 32px; */
+    top: 1.7em;
+    pointer-events: none;
+    z-index: 1;
 }
 .setting-toggle {
     appearance: none;
     width: 100%;
-    height: 10vh;
+    height: 5vh;
+    padding: 5px 5px;
     /* max-width: 400px; */
     max-height: 150px;
     background: #ddd;
-    border-radius: 20px;
+    border-radius: 10px;
     position: relative;
     outline: none;
     cursor: pointer;
