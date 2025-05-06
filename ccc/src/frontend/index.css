@@ -31,7 +31,7 @@ body {
 }
 .player-container {
     display: flex;
-    background-color: #4CAF50;
+    background-color: #607959;
     border-radius: 10px;
     justify-content: space-around;
     font-size: 1.5em;
@@ -42,13 +42,39 @@ body {
 }
 .player-item {
     display: flex;
+    appearance: none;
     justify-content: space-between;
+    width: 100%;
+    font-size: 1.2em;
+    color: black;
     align-items: center;
+    text-align: bottom;
     padding: 15px 10px;
     border-bottom: 1px solid #e0e0e0;
+    background-color: #dfbc5f;
+}
+.player-item::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+.player-item:checked {
+    background: #4CAF50;
+}
+.player-item:checked::before {
+    transform: translateX(20px);
 }
 .player-container:last-child {
     border-bottom: none;
+}
+.player-container .hidden {
+    display: none;
 }
 .settings-container {
     display: table;

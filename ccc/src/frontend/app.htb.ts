@@ -9,10 +9,7 @@ export default Htb("body", {}, () => [
 
   Htb("div", { class: "settings-container" }, () => [
     Htb("h1", { class: "settings-title" }, localize("Commands")),
-    Htb("div", { class: "player-container" }, () => [
-      Htb("div", { class: "player-item" }, "Player 1"),
-      Htb("div", { class: "player-item" }, "Player 2"),
-    ]),
+    Htb("div", { class: "player-container hidden" }, " "),
     Htb("div", { class: "textarea-item" }, () => [
       Htb(
         "textarea",
