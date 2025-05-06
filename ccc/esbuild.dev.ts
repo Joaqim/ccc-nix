@@ -3,40 +3,24 @@
 import esbuild from "esbuild";
 import { writeFile, mkdir, readFile } from "node:fs/promises";
 import process from "node:process";
+import { livereloadPlugin as LiveReloadPlugin } from "@jgoz/esbuild-plugin-livereload";
 import { minify } from "html-minifier-terser";
 import InlineImagePlugin from "esbuild-plugin-inline-image";
 import index from "./src/frontend/index.htb";
 
-(async () => {
+const watchPlugin = {
+  name: "rebuild-notify",
+  setup(build) {
+    build.onEnd((result) => {
+      console.log(`build ended with ${result.errors.length} errors`);
+    });
+  },
+};
+
+const run = async () => {
   await mkdir("./dist/frontend", { recursive: true }).catch(() => {
     // ignore
   });
-
-  await esbuild
-    .build({
-      entryPoints: ["src/frontend/app.ts"],
-      bundle: true,
-      minify: true,
-      format: "esm",
-      target: ["esnext"],
-      write: true,
-      outdir: "./dist/frontend",
-      plugins: [InlineImagePlugin()],
-    })
-    .catch(() => process.exit(1));
-
-  await esbuild
-    .build({
-      entryPoints: ["src/backend/index.ts"],
-      platform: "node",
-      bundle: true,
-      minify: true,
-      format: "esm",
-      target: ["es2022"],
-      write: true,
-      outdir: "./dist/backend",
-    })
-    .catch(() => process.exit(1));
 
   const minifyOptions = {
     collapseWhitespace: true,
@@ -55,4 +39,20 @@ import index from "./src/frontend/index.htb";
     "dist/frontend/index.html",
     `${await minify(index(css), minifyOptions)}`
   );
-})();
+
+  const frontendCtx = await esbuild
+    .context({
+      entryPoints: ["src/frontend/app.ts"],
+      metafile: true,
+      format: "esm",
+      target: ["esnext"],
+      write: true,
+      outdir: "./dist/frontend",
+      plugins: [InlineImagePlugin(), LiveReloadPlugin(), watchPlugin],
+    })
+    .catch(() => process.exit(1));
+
+  await frontendCtx.watch();
+};
+
+run();

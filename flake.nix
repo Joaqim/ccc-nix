@@ -32,16 +32,22 @@
             program = lib.getExe self'.packages.default;
           };
         };
-        packages.default = dream2nix.lib.evalModules {
-          packageSets.nixpkgs = nixpkgs.legacyPackages.${system};
-          modules = [
-            ./default.nix
-            {
-              paths.projectRoot = ./.;
-              paths.projectRootFile = "flake.nix";
-              paths.package = ./.;
-            }
-          ];
+        packages = let
+          evalModules = module:
+            dream2nix.lib.evalModules {
+              packageSets.nixpkgs = nixpkgs.legacyPackages.${system};
+              modules = [
+                module
+                {
+                  paths.projectRoot = ./.;
+                  paths.projectRootFile = "flake.nix";
+                  paths.package = ./.;
+                }
+              ];
+            };
+        in {
+          ccc = evalModules ./default.nix;
+          default = self'.packages.ccc;
         };
       };
     };

@@ -14,9 +14,10 @@
     "clean": "rimraf dist",
     "clean:frontend": "rimraf dist/frontend",
     "clean:backend": "rimraf dist/backend",
+    "watch": "npm run watch:frontend && npm run watch:backend",
     "watch:frontend": "tsx ./esbuild.ts --watch",
     "watch:backend": "tsc -p tsconfig.json --watch",
-    "start": "node dist/backend/index.js",
+    "start": "node --watch dist/backend/index.js",
     "test": "tsx runTests.ts"
   },
   "license": "MIT",

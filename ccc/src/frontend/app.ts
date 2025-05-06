@@ -1,5 +1,7 @@
 import { localize } from "../shared";
 
+new EventSource("/esbuild").addEventListener("change", () => location.reload());
+
 type AvailableEndpoints = "rcon-cli";
 const postCmd = (
   command: string,
