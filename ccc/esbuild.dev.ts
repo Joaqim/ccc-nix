@@ -43,6 +43,7 @@ const run = async () => {
   const frontendCtx = await esbuild
     .context({
       entryPoints: ["src/frontend/app.ts"],
+      bundle: true,
       metafile: true,
       format: "esm",
       target: ["esnext"],

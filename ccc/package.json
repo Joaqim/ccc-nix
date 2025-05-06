@@ -14,6 +14,7 @@
     "clean": "rimraf dist",
     "clean:frontend": "rimraf dist/frontend",
     "clean:backend": "rimraf dist/backend",
+    "dev": "tsx ./esbuild.dev.ts",
     "watch": "npm run watch:frontend && npm run watch:backend",
     "watch:frontend": "tsx ./esbuild.ts --watch",
     "watch:backend": "tsc -p tsconfig.json --watch",
