@@ -66,7 +66,7 @@ export default function setupApi() {
               return res.send({ players: [] });
             }
             return res.send({
-              players: result.split(": ").slice(1).join("").split(" "),
+              players: result.slice(result.indexOf(": ") + 2).split(", "),
             });
           })
           .catch((err) => {

@@ -1,7 +1,5 @@
 import { localize } from "../shared";
 
-new EventSource("/esbuild").addEventListener("change", () => location.reload());
-
 type AvailableEndpoints = "rcon-cli";
 
 const upcase = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -9,9 +7,14 @@ const downcase = (str: string) => str.charAt(0).toLowerCase() + str.slice(1);
 
 export default (() => {
   const textarea = document.querySelector("#textarea") as HTMLElement;
+  textarea.textContent = "";
   const container = document.querySelector(
     ".settings-container"
   ) as HTMLElement;
+
+  new EventSource("/esbuild").addEventListener("change", () =>
+    location.reload()
+  );
 
   let selectedPlayer: string | undefined;
 
@@ -41,39 +44,39 @@ export default (() => {
       }
 
       return response.json().then(({ players }: { players: string[] }) => {
-        if (players.length <= 1) {
+        if (players.length < 2) {
           selectedPlayer = players.at(0);
-          return { players };
-        }
-        const playerContainer = document.querySelector(
-          ".player-container"
-        ) as HTMLElement;
+        } else {
+          const playerContainer = document.querySelector(
+            ".player-container"
+          ) as HTMLElement;
 
-        if (playerContainer.classList.contains("hidden")) {
-          playerContainer.classList.toggle("hidden");
-        }
-        for (const playerName of players) {
-          const playerToggle = document.createElement("input");
-          playerToggles.push(playerToggle);
+          if (playerContainer.classList.contains("hidden")) {
+            playerContainer.classList.toggle("hidden");
+          }
+          for (const playerName of players) {
+            const playerToggle = document.createElement("input");
+            playerToggles.push(playerToggle);
 
-          playerToggle.type = "checkbox";
-          playerToggle.className = "player-item";
-          playerToggle.textContent = playerName;
-          playerContainer.appendChild(playerToggle);
+            playerToggle.type = "checkbox";
+            playerToggle.className = "player-item";
+            playerToggle.textContent = playerName;
+            playerContainer.appendChild(playerToggle);
 
-          playerToggle.addEventListener("click", () => {
-            for (const pt of playerToggles) {
-              if (pt.textContent !== playerName && pt.checked) {
-                pt.checked = false;
-                break;
+            playerToggle.addEventListener("click", () => {
+              for (const pt of playerToggles) {
+                if (pt.textContent !== playerName && pt.checked) {
+                  pt.checked = false;
+                  break;
+                }
               }
-            }
-            if (!playerToggle.checked) {
-              selectedPlayer = undefined;
-            } else {
-              selectedPlayer = playerName;
-            }
-          });
+              if (!playerToggle.checked) {
+                selectedPlayer = undefined;
+              } else {
+                selectedPlayer = playerName;
+              }
+            });
+          }
         }
         return { players };
       });

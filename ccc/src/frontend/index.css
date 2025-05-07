@@ -112,11 +112,11 @@ body {
     border-bottom: none;
 }
 .setting-label {
+    display: inline;
     font-size: 1.4em;
     color: #555;
     position: relative;
-    /* top: 32px; */
-    top: 1.7em;
+    top: 1.9em;
     pointer-events: none;
     z-index: 1;
 }
@@ -125,7 +125,6 @@ body {
     width: 100%;
     height: 5vh;
     padding: 5px 5px;
-    /* max-width: 400px; */
     max-height: 150px;
     background: #ddd;
     border-radius: 10px;
@@ -133,6 +132,7 @@ body {
     outline: none;
     cursor: pointer;
     transition: background 0.3s;
+    min-height: 50px;
 }
 .setting-toggle::before {
     content: '';
