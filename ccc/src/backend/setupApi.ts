@@ -46,7 +46,7 @@ export default function setupApi() {
         return;
       }
 
-      const command: string = req.body.command.startsWith("/")
+      let command: string = req.body.command.startsWith("/")
         ? req.body.command.slice(1)
         : req.body.command;
 
@@ -61,12 +61,46 @@ export default function setupApi() {
       }
       if (command === "list players") {
         execute("env docker exec minecraft-server rcon-cli /list")
-          .then((result) => {
+          .then(async (result) => {
             if (result.startsWith("There are 0 ")) {
               return res.send({ players: [] });
             }
+            const getPlayerNames = (result: string) =>
+              result.trim() !== ""
+                ? result
+                    .slice(result.indexOf(": ") + 2)
+                    .split(", ")
+                    .map((p) => p.trim())
+                : [];
+
+            const getPlayerByGamemode = (gamemode: string) =>
+              execute(
+                `env docker exec minecraft-server rcon-cli /execute at @p[gamemode=${gamemode}] run list`
+              );
+
+            const players = getPlayerNames(result);
+
+            const playerGamemodes: Record<string, string[]> = {
+              creative: [],
+              spectator: [],
+              survival: [],
+            };
+            let playerCount = 0;
+            for (const gamemode in playerGamemodes) {
+              playerGamemodes[gamemode] = getPlayerNames(
+                await getPlayerByGamemode(gamemode)
+              );
+              if (playerGamemodes[gamemode].length > 0) {
+                playerCount += playerGamemodes[gamemode].length;
+              }
+              if (playerCount >= players.length) {
+                break;
+              }
+            }
+
             return res.send({
-              players: result.slice(result.indexOf(": ") + 2).split(", "),
+              players,
+              playerGamemodes,
             });
           })
           .catch((err) => {
@@ -82,9 +116,29 @@ export default function setupApi() {
         return;
       }
 
+      if (/^gamemode \w+ \w+ (true|false)$/.test(command)) {
+        const gameMode = command.split(" ").at(1);
+        const player = command.split(" ").at(2);
+        const toggleValue = command.split(" ").at(3);
+        let newGameMode = gameMode;
+        if (toggleValue && toggleValue === "false") {
+          if (gameMode === "survival") {
+            newGameMode = "creative";
+          } else if (gameMode === "creative") {
+            newGameMode = "survival";
+          } else if (gameMode === "spectator") {
+            newGameMode = "survival";
+          }
+          command = `/execute at @p[name=${player},gamemode=${gameMode}] run gamemode ${newGameMode} ${player}`;
+        } else {
+          command = `gamemode ${gameMode} ${player}`;
+        }
+      }
+
       execute(`env docker exec minecraft-server rcon-cli '${command}'`)
         .then((result) => result.trimEnd())
         .then((result) => {
+          console.log(`'${command}'`);
           console.log(`'${result}'`);
           if (result.startsWith("Unknown or incomplete command")) {
             return res.status(400).send({ message: result });
