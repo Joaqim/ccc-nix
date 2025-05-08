@@ -146,10 +146,22 @@ body {
     transition: transform 0.3s;
 }
 .setting-toggle:disabled {
-    background: #4CAF50;
+    background: #ffdf53;
 }
 .setting-toggle:disabled::before {
     transform: translateX(20px);
+}
+.setting-toggle:checked {
+    background: #4CAF50;
+}
+.setting-toggle:checked::before {
+    transform: translateX(20px);
+}
+.setting-toggle.on {
+    background: #4CAF50;
+}
+.setting-toggle.on::before {
+    translate: translateX(20px);
 }
 .setting-toggle.error {
     background: #a70000;
