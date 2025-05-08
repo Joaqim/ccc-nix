@@ -70,12 +70,20 @@ export default function setupApi() {
             });
           })
           .catch((err) => {
-            return res.status(500).send({ message: err.message });
+            console.log(err);
+            if (/No such container/.test(err)) {
+              return res.status(404).send({
+                message:
+                  "Failed to connect to `rcon-cli` make sure minecraft-server docker container is running",
+              });
+            }
+            return res.status(500).send({ message: err });
           });
         return;
       }
 
       execute(`env docker exec minecraft-server rcon-cli '${command}'`)
+        .then((result) => result.trimEnd())
         .then((result) => {
           console.log(`'${result}'`);
           if (result.startsWith("Unknown or incomplete command")) {

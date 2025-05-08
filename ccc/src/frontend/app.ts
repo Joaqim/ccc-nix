@@ -41,9 +41,15 @@ export default (() => {
 
   const getCurrentGamerule = (gamerule: "doDaylightCycle") => {
     return postCmd(`/gamerule ${gamerule}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
+      .then(async (response) => {
+        if (!response.ok || response.status !== 200) {
+          let message = "";
+          try {
+            message = (await response.json()).message;
+          } catch {
+            message = response.statusText;
+          }
+          throw new Error(message);
         }
         return response.json();
       })
@@ -56,11 +62,8 @@ export default (() => {
 
   const initPlayerToggles = async (): Promise<{ players: string[] }> => {
     return postCmd("list players").then((response: Response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      if (response.status !== 200) {
-        return { players: [] };
+      if (!response.ok || response.status !== 200) {
+        return response.json().then(({ message }) => message);
       }
 
       return response.json().then(({ players }: { players: string[] }) => {
@@ -160,7 +163,7 @@ export default (() => {
 
     return postCmd(command)
       .then(async (response) => {
-        if (response.status !== 200) {
+        if (!response.ok) {
           let message = "";
           try {
             const json = await response.json();
@@ -268,8 +271,13 @@ export default (() => {
   };
 
   initPlayerToggles()
+    .catch((error) => {
+      console.error(error);
+      textarea.textContent += `${"Failed to get players"}`;
+      throw new Error(error);
+    })
     .then(({ players }) => {
-      if (players.length > 0) {
+      if (players?.length > 0) {
         createBtn(
           "/gamemode survival @p",
           commandButtonAction,
@@ -288,9 +296,11 @@ export default (() => {
         );
       }
     })
-    .catch(console.error)
-    .finally(async () => {
+    .then(async () => {
       await initGameruleToggles();
       initButtons();
+    })
+    .catch((error) => {
+      textarea.textContent += `\r\n${error}`;
     });
 })();
