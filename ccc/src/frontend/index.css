@@ -40,6 +40,9 @@ body {
     /* padding: 3vh 1vw; */
     border-bottom: 1px solid #e0e0e0;
 }
+.player-container .hidden {
+    display: none;
+}
 .player-item {
     display: flex;
     appearance: none;

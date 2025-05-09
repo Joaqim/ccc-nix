@@ -15,6 +15,7 @@ export default Htb("body", {}, () => [
         "textarea",
         {
           id: "textarea",
+          name: "textarea", // https://stackoverflow.com/a/16959534
           class: "textarea-item",
           readonly: true,
           disabled: true,
